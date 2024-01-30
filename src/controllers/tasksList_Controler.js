@@ -1,27 +1,33 @@
 const {pool}=require("./db/connection.js");
 
+const Service=require("../services/tasksList_Service.js");
+
 //get "mylists/:user_id"
 async function get_lists(req,res){
       let user_id=req.params.user_id;
 
-      //Chequemaos que se haga un get con el mismo user_id de list, que el user_id en la session
       if (req.session.user_id==user_id){
-            let response=await pool.query("SELECT lists.* FROM users INNER JOIN lists on users.id=lists.user_id WHERE users.id=$1",[user_id]);
+         
+         let {error,lists}=await Service.get_lists(user_id);
+         if (error){}//poner error}
 
-            res.status(200).json(response.rows); 
+         //hacer good response
+         //(res,"",lists)
       }
-      //Si no coincide deberiamos mandar un redirect o algo asi.
+
       else{
-            res.status(401).json({"error":"wrong_data"});
+        res.status(401).json({"error":"wrong_data"});
       }
 }
 
-//get "/:id"
+//get "/:list_id"
 async function get_tasks(req,res){
-      let id=req.params.id;
+      let list_id=req.params.list_id;
 
-      let response=await pool.query(`SELECT * FROM TASKS WHERE list_id=$1 AND checked=false order by pos`,[id])
+      let {error,tasks}=await Service.get_tasks(list_id);
       
+      //Hacer good response
+      //(res,"",tasks)
       res.status(200).json(response.rows);
 }
 
@@ -30,12 +36,11 @@ async function create_list(req,res){
       let {title,color,user_id}=req.body;
 
       if (!title || !color || !user_id){res.status(400).json({"error":"missing_data"})}
-
-      let response=await pool.query(`INSERT INTO lists(title,color,user_id) VALUES($1,$2)
-      RETURNING id`,[title,color,user_id]);
       
-      let new_id=response.rows[0].id;
+      let {error,new_id}=await Service.create_list(title,color,user_id);
       
+      //hacer good response
+      //(res,"",{id:new_id})
       res.status(201).json({"id":new_id});
 }
 
@@ -43,8 +48,12 @@ async function create_list(req,res){
 async function modify_list(req,res){
       let {id,title,color}=req.body;
 
+      let {error}=await Service.modify_list(id,title,color);
+
       await pool.query("UPDATE lists SET title=$1,color=$2 WHERE id=$3",[title,color,id]);
       
+      //hacer good response
+      //(res,"Updated",)
       res.status(200).json("UPDATED");
 }
 
@@ -52,11 +61,17 @@ async function modify_list(req,res){
 async function delete_list(req,res){
       let id=req.params.id;
 
-      await pool.query("DELETE FROM lists WHERE id=$1",[id]);
+      let {error}=await Service.delete_list(id);
 
+      //hacer good response
+      //(res,"Deleted")
       res.status(200).send("DELETED");
 }
 
 module.exports={
-    get_lists,get_tasks,create_list,modify_list,delete_list
-};
+    get_lists,
+    get_tasks,
+    create_list,
+    modify_list,
+    delete_list
+}

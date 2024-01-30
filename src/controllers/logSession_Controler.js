@@ -1,4 +1,4 @@
-const {pool}=require("./db/connection.js");
+const Service=require("../services/logSession_Service.js");
 
 //get "/login"
 async function getLogin(req,res){
@@ -14,27 +14,25 @@ async function getLogin(req,res){
 async function postLogin(req,res){
      let {username,password}=req.body;
 
-     let response=await pool.query(`SELECT users.id,user_access.password FROM users INNER JOIN 
-                        user_access on users.id=user_access.user_id WHERE username=$1`,[username]);
+     let {error,user_id}=await Service.postLogin(username,password);
      
-     if (response.rows.length==0){res.status(400).json({"error":"wrong_user"})}
+     if (error){return error}
+    
+       
+     req.session.user_id=user_id;
+     res.cookie("user_id",user_id);
      
-     //Aca deberiamos deshashear la contra antes(en caso que este hasheada)
-     else if (response.rows[0].password==password){
-        let user_id=response.rows[0].id;
-        req.session.user_id=user_id;
-        res.cookie("user_id",user_id);
-        
-        res.status(200).send("Logged");
-     }
-     else{
-        res.status(400).json({"error":"wrong_password"});
-     }
+     //Return good response
+     //(res,"Logged in")
+     res.status(200).send("Logged");
 }
+
  
 //get "/logout"
 async function logout(req,res){
     req.session.destroy();
+
+    //(res,"Logged out")
     res.status(200).send("Logged out");
 }
 

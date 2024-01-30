@@ -6,8 +6,8 @@ const Controler=require("../controllers/tasks_Controler");
 //Traer info de una task
 router.get("/t",Controler.test);
 
-/*Traer data particular de una task (no operativo por el momento)
-router.get("/:id",Controler.get_task);*/
+//Traer data particular de una task (no operativo por el momento)
+router.get("/:id",Controler.get_taskInfo);
 
 //Traer task ya checked
 router.get("/checked/:list_id",Controler.get_checkedTasks);
