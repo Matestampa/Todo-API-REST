@@ -1,5 +1,7 @@
 const {pool}=require("./db/postgres.js");
 
+const {DFLT_API_ERRORS,INTERNAL_ERRORS}=require("../error_handling");
+
 //get "mylists/:user_id"
 async function get_lists(user_id){
    
@@ -8,12 +10,12 @@ async function get_lists(user_id){
         response=await pool.query("SELECT lists.* FROM users INNER JOIN lists on users.id=lists.user_id WHERE users.id=$1",[user_id]);
     }
     catch(e){
-        return "error"
+        return {error:INTERNAL_ERRORS.DB("",e),lists:null};
     }
     
     let lists=response.rows;
 
-    return {error:undefined,lists:lists};
+    return {error:null,lists:lists};
     
 }
 
@@ -25,11 +27,11 @@ async function get_tasks(list_id){
         response=await pool.query(`SELECT * FROM TASKS WHERE list_id=$1 AND checked=false order by pos`,[list_id])
     }
     catch(e){
-        return "error";
+        return {error:INTERNAL_ERRORS.DB("",e),tasks:null};
     }
     let tasks=response.rows;
     
-    return {error:undefined,tasks:tasks}
+    return {error:null,tasks:tasks}
 }
 
 //post
@@ -41,12 +43,12 @@ async function create_list(req,res){
         RETURNING id`,[title,color,user_id]);  
     }
     catch(e){
-        return "error";
+        return {error:INTERNAL_ERRORS.DB("",e),new_id:null};
     }
     
     let new_id=response.rows[0].id;
     
-    return {error:undefined,new_id:new_id}
+    return {error:null,new_id:new_id}
 }
 
 //put
@@ -56,7 +58,7 @@ async function modify_list(id,title,color){
         await pool.query("UPDATE lists SET title=$1,color=$2 WHERE id=$3",[title,color,id]); 
     }
     catch(e){
-        return "erorr";
+        return {error:INTERNAL_ERRORS.DB("",e)};;
     }
     
     return {}
@@ -69,7 +71,7 @@ async function delete_list(id){
         await pool.query("DELETE FROM lists WHERE id=$1",[id]); 
     }
     catch(e){
-        return "error";
+        return {error:INTERNAL_ERRORS.DB("",e)};
     }
     return {}
 }

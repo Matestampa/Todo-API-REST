@@ -1,4 +1,7 @@
+const {apiError_handler,DFLT_API_ERRORS}=require("../error_handling");
+
 const Service=require("../services/logSession_Service.js");
+
 
 //get "/login"
 async function getLogin(req,res){
@@ -16,7 +19,7 @@ async function postLogin(req,res){
 
      let {error,user_id}=await Service.postLogin(username,password);
      
-     if (error){return error}
+     if (error){apiError_handler(error,res);return}
     
        
      req.session.user_id=user_id;

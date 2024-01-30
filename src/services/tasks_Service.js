@@ -1,5 +1,7 @@
 const {pool}=require("./db/postgres.js");
 
+const {DFLT_API_ERRORS,INTERNAL_ERRORS}=require("../error_handling");
+
 //get "/:id"
 async function get_taskInfo(id){
         let response;
@@ -7,12 +9,12 @@ async function get_taskInfo(id){
             response=await pool.query("SELECT * FROM tasks WHERE id=$1",[id]); 
         }
         catch(e){
-            return "error"
+            return {error:INTERNAL_ERRORS.DB("",e),task:null}
         }
         
         let task=response.rows[0];
         
-        return {error:undefined,task:task};
+        return {error:null,task:task};
 }
 
 
@@ -24,13 +26,13 @@ async function get_checkedTasks(list_id){
         response=await pool.query(`SELECT * FROM tasks WHERE list_id=$1 and checked=true ORDER BY completed`,[list_id]);
     }
     catch(e){
-        return "error";
+        return {error:INTERNAL_ERRORS.DB("",e),checkedTasks:null}
     }
 
     let checkedTasks=response.rows;
 
     //return checked tasks
-    return {error:undefined, checkedTasks:checkedTasks};
+    return {error:null ,checkedTasks:checkedTasks};
 
 }
 
@@ -48,7 +50,7 @@ async function create_task(body,list_id,last_pos){
  
        }
        catch(e){
-         return "error"; 
+         return {error:INTERNAL_ERRORS.DB("",e),data:null}
        }
        
        let newTask_id=response.rows[0].id;
@@ -67,7 +69,7 @@ async function modify_task(body,id){
         response=await pool.query("UPDATE tasks SET body=$1 WHERE id=$2",[body,id]);
     }
     catch(e){
-        return "error"
+        return {error:INTERNAL_ERRORS.DB("",e)}
     }
 
     return {}
@@ -86,10 +88,10 @@ async function uncheck_task(id,last_pos){
                      WHERE id=$3`,[checked,new_pos,id]);
     }
     catch(e){
-        return "error";
+        return {error:INTERNAL_ERRORS.DB("",e),new_pos:null}
     }
     
-    return {error:undefined,new_pos:new_pos};
+    return {error:null,new_pos:new_pos};
 }
 
 //put "/check"
@@ -102,7 +104,7 @@ async function check_task(id){
                      WHERE id=$2`,[checked,id]);
     }
     catch(e){
-        return "error";
+        return {error:INTERNAL_ERRORS.DB("",e)}
     }
     
     return {}
@@ -148,7 +150,7 @@ async function delete_task(id){
         await pool.query("DELETE FROM tasks WHERE id=$1",[id]);
     }
     catch(e){
-        return "error"
+        return {error:INTERNAL_ERRORS.DB("",e)}
     }
     
     return {};
