@@ -1,4 +1,5 @@
 const {apiError_handler,DFLT_API_ERRORS}=require("../error_handling");
+const {normal_response}=require("../middlewares/response.js");  
 
 const Service=require("../services/logSession_Service.js");
 
@@ -6,7 +7,8 @@ const Service=require("../services/logSession_Service.js");
 //get "/login"
 async function getLogin(req,res){
       if (req.session.user_id){
-        res.status(200).json({"logged":true});
+
+        normal_response(res,"",{logged:true})
       }
       else{
         res.status(401).json({"logged":false});
@@ -25,9 +27,7 @@ async function postLogin(req,res){
      req.session.user_id=user_id;
      res.cookie("user_id",user_id);
      
-     //Return good response
-     //(res,"Logged in")
-     res.status(200).send("Logged");
+     normal_response(res,"Logged in")
 }
 
  
@@ -36,7 +36,7 @@ async function logout(req,res){
     req.session.destroy();
 
     //(res,"Logged out")
-    res.status(200).send("Logged out");
+    normal_response(res,"Logged out");
 }
 
 module.exports={

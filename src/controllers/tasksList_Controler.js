@@ -1,4 +1,5 @@
 const {apiError_handler,DFLT_API_ERRORS}=require("../error_handling");
+const {normal_response}=require("../middlewares/response.js"); 
 
 const Service=require("../services/tasksList_Service.js");
 
@@ -13,7 +14,7 @@ async function get_lists(req,res){
          if (error){apiError_handler(error,res);return}
 
          //hacer good response
-         //(res,"",lists)
+         normal_response(res,"",lists)
       }
 
       else{
@@ -30,8 +31,7 @@ async function get_tasks(req,res){
       if (error){apiError_handler(error,res)};
       
       //Hacer good response
-      //(res,"",tasks)
-      res.status(200).json(response.rows);
+      normal_response(res,"",tasks)
 }
 
 //post
@@ -45,8 +45,7 @@ async function create_list(req,res){
       if (error){apiError_handler(error,res)};
       
       //hacer good response
-      //(res,"",{id:new_id})
-      res.status(201).json({"id":new_id});
+      normal_response(res,"",{id:new_id})
 }
 
 //put
@@ -58,8 +57,7 @@ async function modify_list(req,res){
       if (error){apiError_handler(error,res)};
 
       //hacer good response
-      //(res,"Updated",)
-      res.status(200).json("UPDATED");
+      normal_response(res,"Updated",)
 }
 
 //delete "/:id"
@@ -71,8 +69,7 @@ async function delete_list(req,res){
       if (error){apiError_handler(error,res)};
 
       //hacer good response
-      //(res,"Deleted")
-      res.status(200).send("DELETED");
+      normal_response(res,"Deleted")
 }
 
 module.exports={
