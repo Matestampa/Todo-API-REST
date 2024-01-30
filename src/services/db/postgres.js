@@ -2,14 +2,8 @@
 //-------------------------------  Y COSAS RELACIONADAS    -----------------------------
 
 const {Pool}=require("pg");
+const POSTGRES_CONFIG=require("../../config/postgres_config.js");
 
-const pool=new Pool({
-    user:"postgres",
-    password:"postgres",
-    host:"localhost",
-    port:"5432",
-    database:"todo",
-    idleTimeoutMillis:0
-});
+const pool=new Pool(POSTGRES_CONFIG);
 
 module.exports={pool};

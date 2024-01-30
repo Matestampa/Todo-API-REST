@@ -13,6 +13,8 @@ const logSession_Routes=require("./routes/logSession_Routes");
 const tasksList_Routes=require("./routes/tasksList_Routes.js");
 const tasks_Routes=require("./routes/tasks_Routes.js");
 
+//--------------- importacion vars generales de la app --------------------
+const {APP_GEN_VARS}=require("./config/app_config.js");
 
 
 const App=express();
@@ -23,7 +25,7 @@ App.use(express.json());
 App.use(cookieparser());
 
 App.use(sessions({
-    secret:"putoelquelee",
+    secret:APP_GEN_VARS.session_secret,
     saveUninitialized:true,
     resave:false,
     cookie:{max_age:1000*60*60*24},

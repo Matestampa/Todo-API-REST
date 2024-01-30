@@ -1,7 +1,6 @@
 //------------------------ MIDDLEWARE PARA AUTENTICACION DE SESION DE USUARIO --------------- 
 
-const TESTING_MODE=true; //este mode lo activamos cuando estamos probando endpoints,
-//y no queremos que nos pida el login a cada rato
+const {APP_GEN_VARS}=require("../config/app_config.js");
 
 function check_authentication(req,res,next){
     
