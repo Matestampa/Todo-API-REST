@@ -29,7 +29,7 @@ async function get_checkedTasks(req,res){
 async function create_task(req,res){
        let {body,list_id,last_pos}=req.body;
        
-       if (!body || !list_id || !last_pos){res.status(400).json({"error":"missing_data"})}
+       if (!body || !list_id || !last_pos){apiError_handler(DFLT_API_ERRORS.BAD_REQ("Missing data"))}
        
        let {error,data}=await Service.create_task(body,list_id,last_pos);
 
@@ -44,7 +44,7 @@ async function create_task(req,res){
 async function modify_task(req,res){
     let {body,id}=req.body;
 
-    if (!body || !id){res.status(400).json({"error":"missing_data"})}
+    if (!body || !id){apiError_handler(DFLT_API_ERRORS.BAD_REQ("Missing data"))}
 
     let {error}=await Service.modify_task(body,id);
 
@@ -58,7 +58,7 @@ async function uncheck_task(req,res){
     //Recibe last_pos de las unchecked tasks para poder insertarla debajo de todo
     let {id,last_pos}=req.body;
     
-    if (!id || last_pos){res.status(400).json({"error":"missing_data"})}
+    if (!id || last_pos){apiError_handler(DFLT_API_ERRORS.BAD_REQ("Missing data"))}
      
     let {error,new_pos}=await Service.uncheck_task(id,last_pos);
 
@@ -72,7 +72,7 @@ async function uncheck_task(req,res){
 async function check_task(req,res){
     let {id}=req.body;
 
-    if (!id){res.status(400).json({"error":"missing_data"})}
+    if (!id){apiError_handler(DFLT_API_ERRORS.BAD_REQ("Missing data"))}
 
     let {error}=await Service.check_task(id);
 
@@ -85,7 +85,7 @@ async function check_task(req,res){
 async function change_order(req,res){  
     let {id,up_pos,down_pos,list_id}=req.body;
     
-    if (!id || !up_pos || !down_pos || !list_id){res.status(400).json({"error":"missing_data"})}
+    if (!id || !up_pos || !down_pos || !list_id){apiError_handler(DFLT_API_ERRORS.BAD_REQ("Missing data"))}
     
     let {error,data}=await Service.change_order(id,up_pos,down_pos,list_id);
 
