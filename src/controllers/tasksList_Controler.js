@@ -6,7 +6,8 @@ const Service=require("../services/tasksList_Service.js");
 //get "mylists/:user_id"
 async function get_lists(req,res){
       let user_id=req.params.user_id;
-
+      
+      //Chequear que el user_id de la session, coincida con el user_id de las lists solicitadas.
       if (req.session.user_id==user_id){
          
          let {error,lists}=await Service.get_lists(user_id);
@@ -16,7 +17,8 @@ async function get_lists(req,res){
          //hacer good response
          normal_response(res,"",lists)
       }
-
+      
+      //Si no coincide, error
       else{
         apiError_handler(DFLT_API_ERRORS.NOT_AUTH(),res);
       }
@@ -30,7 +32,6 @@ async function get_tasks(req,res){
 
       if (error){apiError_handler(error,res)};
       
-      //Hacer good response
       normal_response(res,"",tasks)
 }
 
@@ -44,7 +45,6 @@ async function create_list(req,res){
 
       if (error){apiError_handler(error,res)};
       
-      //hacer good response
       normal_response(res,"",{id:new_id})
 }
 
@@ -56,7 +56,6 @@ async function modify_list(req,res){
 
       if (error){apiError_handler(error,res)};
 
-      //hacer good response
       normal_response(res,"Updated",)
 }
 
@@ -68,7 +67,6 @@ async function delete_list(req,res){
 
       if (error){apiError_handler(error,res)};
 
-      //hacer good response
       normal_response(res,"Deleted")
 }
 

@@ -6,7 +6,7 @@ const Controler=require("../controlers/tasksList_Controler.js");
 //Traer todas las lists de un user
 router.get("/mylists/:user_id",Controler.get_lists);
 
-//Traer las tasks de una list
+//Traer las tasks de una list (las no checked todavia)
 router.get("/:id",Controler.get_tasks);
 
 //Crear una list

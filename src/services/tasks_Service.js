@@ -31,7 +31,6 @@ async function get_checkedTasks(list_id){
 
     let checkedTasks=response.rows;
 
-    //return checked tasks
     return {error:null ,checkedTasks:checkedTasks};
 
 }
@@ -55,7 +54,6 @@ async function create_task(body,list_id,last_pos){
        
        let newTask_id=response.rows[0].id;
 
-       //return data:{"newTask_id", "new_pos"}
        return {error:undefined, data:{new_id:newTask_id,new_pos:new_pos} };
 
 }
@@ -129,7 +127,8 @@ async function change_order(id,up_pos,down_pos,list_id){
             down_pos+=ORDER_SCALE;
             //Generamos la nueva pos para la task que metemos
             new_pos=parseInt((up_pos+down_pos)/2);
-            //Aumentamos en la base de datos todos los que tengan posicion mayor al de arriba
+            
+            //Aumentamos en la bd todos los que tengan posicion mayor al de arriba
             await pool.query(`UPDATE tasks SET pos=pos+$1 WHERE list_id=$2 
                              AND pos>$3`,[ORDER_SCALE,list_id,up_pos]);
         }

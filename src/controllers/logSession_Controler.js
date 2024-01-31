@@ -23,7 +23,7 @@ async function postLogin(req,res){
      
      if (error){apiError_handler(error,res);return}
     
-       
+     //Aplicar valores a la session y a la cookie  
      req.session.user_id=user_id;
      res.cookie("user_id",user_id);
      
@@ -33,9 +33,9 @@ async function postLogin(req,res){
  
 //get "/logout"
 async function logout(req,res){
+    //Destruir session
     req.session.destroy();
 
-    //(res,"Logged out")
     normal_response(res,"Logged out");
 }
 

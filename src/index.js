@@ -1,4 +1,7 @@
 const {App}=require("./app.js");
 
+const {APP_CONN_VARS}=require("./config/app_config.js");
 
-App.listen(3000);
+const PORT=APP_CONN_VARS.PORT;
+
+App.listen(PORT,()=>{console.log(`Running on port:${PORT}`)});

@@ -35,7 +35,6 @@ async function create_task(req,res){
 
        if (error){apiError_handler(error,res);return};
 
-       //Return good response
        normal_response(res,"",{id:data.new_id, pos:data.pos})
 
 }
@@ -51,7 +50,6 @@ async function modify_task(req,res){
 
     if (error){apiError_handler(error,res);return};
     
-    //hacer good response
     normal_response(res,"Updated")
 }
 
@@ -66,7 +64,7 @@ async function uncheck_task(req,res){
 
     if (error){apiError_handler(error,res);return};
     
-    //hacer good response
+    
     normal_response(res,"",{new_pos:new_pos})
 }
 
@@ -80,7 +78,6 @@ async function check_task(req,res){
 
     if (error){apiError_handler(error,res);return};
     
-    //hacer good response
     normal_response(res,"Checked")
 }
 
@@ -94,7 +91,6 @@ async function change_order(req,res){
 
     if (error){apiError_handler(error,res);return};
 
-    //hacer good response
     normal_response(res,"",{"new_pos":data.new_pos,"re_order":data.re_order,"cant":data.cant})
 }
 
@@ -106,7 +102,6 @@ async function delete_task(req,res){
 
      if (error){apiError_handler(error,res);return};
 
-     //hacer good response
      normal_response(res,"Deleted")
 }
 

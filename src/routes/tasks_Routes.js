@@ -3,13 +3,11 @@ const router=Router();
 
 const Controler=require("../controllers/tasks_Controler");
 
-//Traer info de una task
-router.get("/t",Controler.test);
 
 //Traer data particular de una task (no operativo por el momento)
 router.get("/:id",Controler.get_taskInfo);
 
-//Traer task ya checked
+//Traer tasks ya checked
 router.get("/checked/:list_id",Controler.get_checkedTasks);
 
 //Crear task
@@ -18,10 +16,10 @@ router.post("/",Controler.create_task);
 //Modificar task
 router.put("/",Controler.modify_task);
 
-//Check 
+//Check task
 router.put("/check",Controler.check_task);
 
-//Uncheck
+//Uncheck task
 router.put("/uncheck",Controler.uncheck_task);
 
 //Cambiar orden entre 2 tasks
