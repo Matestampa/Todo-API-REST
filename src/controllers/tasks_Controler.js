@@ -14,6 +14,18 @@ async function get_taskInfo(req,res){
         normal_response(res,"",{task:task})
 }
 
+//get "/:list_id"
+async function get_tasks(req,res){
+    let list_id=req.params.list_id;
+
+    let {error,tasks}=await Service.get_tasks(list_id);
+
+    if (error){apiError_handler(error,res)};
+    
+    normal_response(res,"",tasks)
+}
+
+
 //get "/checked/:list_id"
 async function get_checkedTasks(req,res){
     let list_id=req.params.list_id;
@@ -110,6 +122,7 @@ async function delete_task(req,res){
 
 module.exports={
     get_taskInfo,
+    get_tasks,
     get_checkedTasks,
     create_task,
     modify_task,

@@ -1,6 +1,6 @@
 const {pool}=require("./db/postgres.js");
 
-const {DFLT_API_ERRORS,INTERNAL_ERRORS}=require("../error_handling");
+const {DFLT_API_ERRORS,INTERNAL_ERRORS}=require("../error_handling/index.js");
 
 //get "mylists/:user_id"
 async function get_lists(user_id){
@@ -19,20 +19,6 @@ async function get_lists(user_id){
     
 }
 
-//get "/:list_id"
-async function get_tasks(list_id){
-    
-    let response;
-    try{
-        response=await pool.query(`SELECT * FROM TASKS WHERE list_id=$1 AND checked=false order by pos`,[list_id])
-    }
-    catch(e){
-        return {error:INTERNAL_ERRORS.DB("",e),tasks:null};
-    }
-    let tasks=response.rows;
-
-    return {error:null,tasks:tasks}
-}
 
 //post
 async function create_list(req,res){
@@ -78,7 +64,6 @@ async function delete_list(id){
 
 module.exports={
     get_lists,
-    get_tasks,
     create_list,
     modify_list,
     delete_list

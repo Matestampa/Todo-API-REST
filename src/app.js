@@ -10,7 +10,7 @@ const {check_authentication}=require("./middlewares/authentication.js");
 
 //--------------------- importacion de rutas -----------------------------------
 const logSession_Routes=require("./routes/logSession_Routes");
-const tasksList_Routes=require("./routes/tasksList_Routes.js");
+const lists_Routes=require("./routes/lists_Routes.js");
 const tasks_Routes=require("./routes/tasks_Routes.js");
 
 //--------------- importacion vars generales de la app --------------------
@@ -43,7 +43,7 @@ App.use("/user",logSession_Routes);
 App.use(check_authentication);
 
 //------------------------ Resto de endpoints ------------------------------------
-App.use("/tasks_list",tasksList_Routes);
+App.use("/lists",lists_Routes);
 App.use("/tasks",tasks_Routes);
 
 

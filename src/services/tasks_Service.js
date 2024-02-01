@@ -19,6 +19,21 @@ async function get_taskInfo(id){
         return {error:null,task:task};
 }
 
+//get "/:list_id"
+async function get_tasks(list_id){
+    
+    let response;
+    try{
+        response=await pool.query(`SELECT * FROM TASKS WHERE list_id=$1 AND checked=false order by pos`,[list_id])
+    }
+    catch(e){
+        return {error:INTERNAL_ERRORS.DB("",e),tasks:null};
+    }
+    let tasks=response.rows;
+
+    return {error:null,tasks:tasks}
+}
+
 
 //get "/checked/:list_id"
 async function get_checkedTasks(list_id){
@@ -167,6 +182,7 @@ async function delete_task(id){
 
 module.exports={
     get_taskInfo,
+    get_tasks,
     get_checkedTasks,
     create_task,
     modify_task,

@@ -1,7 +1,7 @@
-const {apiError_handler,DFLT_API_ERRORS}=require("../error_handling");
+const {apiError_handler,DFLT_API_ERRORS}=require("../error_handling/index.js");
 const {normal_response}=require("../middlewares/response.js"); 
 
-const Service=require("../services/tasksList_Service.js");
+const Service=require("../services/lists_Service.js");
 
 //get "mylists/:user_id"
 async function get_lists(req,res){
@@ -24,16 +24,6 @@ async function get_lists(req,res){
       }
 }
 
-//get "/:list_id"
-async function get_tasks(req,res){
-      let list_id=req.params.list_id;
-
-      let {error,tasks}=await Service.get_tasks(list_id);
-
-      if (error){apiError_handler(error,res)};
-      
-      normal_response(res,"",tasks)
-}
 
 //post
 async function create_list(req,res){
@@ -72,7 +62,6 @@ async function delete_list(req,res){
 
 module.exports={
     get_lists,
-    get_tasks,
     create_list,
     modify_list,
     delete_list
