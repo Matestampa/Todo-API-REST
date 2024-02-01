@@ -39,7 +39,7 @@ async function get_tasks(req,res){
 async function create_list(req,res){
       let {title,color,user_id}=req.body;
 
-      if (!title || !color || !user_id){apiError_handler(DFLT_API_ERRORS.BAD_REQ("Missing data"))}
+      if (!title || !color || !user_id){apiError_handler(DFLT_API_ERRORS.BAD_REQ("Missing data"),res);return}
       
       let {error,new_id}=await Service.create_list(title,color,user_id);
 
