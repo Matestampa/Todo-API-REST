@@ -125,23 +125,31 @@ async function change_order(id,up_pos,down_pos,list_id){
         //Primero nos fijamos si es que hay conflicto de lugar
         if (new_pos==up_pos || new_pos==down_pos){
             re_order=true;
-            //Incrementamos la pos del de abajo
+            //Incrementamos "la pos" del de abajo
             down_pos+=ORDER_SCALE;
             //Generamos la nueva pos para la task que metemos
             new_pos=parseInt((up_pos+down_pos)/2);
-            
-            //Aumentamos en la bd todos los que tengan posicion mayor al de arriba
-            await pool.query(`UPDATE tasks SET pos=pos+$1 WHERE list_id=$2 
-                             AND pos>$3`,[ORDER_SCALE,list_id,up_pos]);
         }
     
     }
+
+    //Actualizamos la db
+    try{
+        //Si hay "conflicto"
+        if (re_order){
+            //Aumentamos la pos de todas las que tengan posicion mayor a "up_pos"
+            await pool.query(`UPDATE tasks SET pos=pos+$1 WHERE list_id=$2 
+            AND pos>$3`,[ORDER_SCALE,list_id,up_pos]);
+        }
+        
+        //Updateamos la pos de la task que metemos
+        await pool.query(`UPDATE tasks set pos=$1 WHERE id=$2`,[new_pos,id]);
+    }
+    catch(e){
+        return {error:INTERNAL_ERRORS.DB("",e),data:null};
+    }
     
-    //Luego updateamos la pos en la bd de la task que metemos
-    await pool.query(`UPDATE tasks set pos=$1 WHERE id=$2`,[new_pos,id]);
-    
-    //return data:"new_pos","re_order","cant"
-    return {error:undefined, data:{"new_pos":new_pos,"re_order":re_order,"cant":re_order?ORDER_SCALE:null}}
+    return {error:null, data:{"new_pos":new_pos,"re_order":re_order,"cant":re_order?ORDER_SCALE:null}}
 }
 
 //delete "/:id"
