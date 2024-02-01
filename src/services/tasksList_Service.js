@@ -30,7 +30,7 @@ async function get_tasks(list_id){
         return {error:INTERNAL_ERRORS.DB("",e),tasks:null};
     }
     let tasks=response.rows;
-    
+
     return {error:null,tasks:tasks}
 }
 

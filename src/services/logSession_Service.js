@@ -3,7 +3,7 @@ const {pool}=require("./db/postgres.js");
 const {DFLT_API_ERRORS,INTERNAL_ERRORS}=require("../error_handling");
 
 //POST "login"
-async function postLogin(username,password){
+async function post_login(username,password){
     let response=await pool.query(`SELECT users.id,user_access.password FROM users INNER JOIN 
                         user_access on users.id=user_access.user_id WHERE username=$1`,[username]);
      
@@ -20,4 +20,4 @@ async function postLogin(username,password){
      }
 }
 
-module.exports={postLogin};
+module.exports={post_login};

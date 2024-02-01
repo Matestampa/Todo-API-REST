@@ -5,21 +5,21 @@ const Service=require("../services/logSession_Service.js");
 
 
 //get "/login"
-async function getLogin(req,res){
+async function get_login(req,res){
       if (req.session.user_id){
 
         normal_response(res,"",{logged:true})
       }
       else{
-        res.status(401).json({"logged":false});
+        apiError_handler(DFLT_API_ERRORS.NOT_AUTH("",{logged:false}),res)
       }
 }
 
 //put "login"
-async function postLogin(req,res){
+async function post_login(req,res){
      let {username,password}=req.body;
 
-     let {error,user_id}=await Service.postLogin(username,password);
+     let {error,user_id}=await Service.post_login(username,password);
      
      if (error){apiError_handler(error,res);return}
     
@@ -40,5 +40,5 @@ async function logout(req,res){
 }
 
 module.exports={
-    getLogin,postLogin,logout
+    get_login,post_login,logout
 }

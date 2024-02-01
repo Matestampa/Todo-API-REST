@@ -2,6 +2,8 @@ const {pool}=require("./db/postgres.js");
 
 const {DFLT_API_ERRORS,INTERNAL_ERRORS}=require("../error_handling");
 
+const {ORDER_SCALE}=require("./const_vars/tasks_constVars.js");
+
 //get "/:id"
 async function get_taskInfo(id){
         let response;
