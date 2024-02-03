@@ -20,16 +20,7 @@ const APP_CONN_VARS={
     port:process.env.PORT,
 }
 
-//Variables de conexion de postgres
-const POSTGRES_CONN_VARS={
-    user:process.env.PG_USER,
-    password:process.env.PG_PASSWORD,
-    host:process.env.PG_HOST,
-    port:process.env.PG_PORT,
-}
-
 
 module.exports={APP_GEN_VARS,
                APP_CONN_VARS,
-               POSTGRES_CONN_VARS
 }
